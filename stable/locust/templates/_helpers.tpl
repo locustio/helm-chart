@@ -53,10 +53,14 @@ Create fully qualified configmap name.
 {{- end -}}
 
 {{- define "locust.labels" -}}
-heritage: {{ .Release.Service | quote }}
-release: {{ .Release.Name | quote }}
-chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-app: locust
+app.kubernetes.io/name: {{ include "locust.name" . }}
+helm.sh/chart: {{ include "locust.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
 loadtest: {{ .Values.loadtest.name }}
 {{- if .Values.extraLabels }}
 {{ toYaml .Values.extraLabels }}
