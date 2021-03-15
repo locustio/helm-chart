@@ -1,0 +1,29 @@
+name: Chart Testing
+on: [pull_request]
+jobs:
+  build:
+    name: lint, install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Fetch history
+        run: git fetch --prune --unshallow
+
+      - name: Run chart-testing (lint)
+        id: lint
+        uses: helm/chart-testing-action@v1.0.0
+        with:
+          command: lint
+          config: ci/ct.yaml
+
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1.0.0-alpha.3
+        if: steps.lint.outputs.changed == 'true'
+
+      - name: Run chart-testing (install)
+        uses: helm/chart-testing-action@v1.0.0
+        with:
+          command: install
+          config: ci/ct.yaml
