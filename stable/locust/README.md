@@ -1,35 +1,41 @@
 # locust
 
-A chart to install Locust, a scalable load testing tool written in Python.
+![Version: 0.9.9](https://img.shields.io/badge/Version-0.9.9-informational?style=flat-square) ![AppVersion: 1.4.3](https://img.shields.io/badge/AppVersion-1.4.3-informational?style=flat-square)
 
-This chart will setup everything required to run a full distributed locust environment with any amount of workers.
-
-This chart will also create configmaps for storing the locust files in Kubernetes, this way there is no need to build custom docker images.
-
-By default it will install using an example locustfile and lib from [stable/locust/locustfiles/example](https://github.com/locustio/helm-chart/tree/master/stable/locust/locustfiles/example). When you want to provide your own locustfile, you will need to create 2 configmaps using the structure from that example:
-
-```console
-kubectl create configmap my-loadtest-locustfile --from-file path/to/your/main.py
-kubectl create configmap my-loadtest-lib --from-file path/to/your/lib/
-```
-
-And then install the chart passing the names of those configmaps as values:
-
-```console
-helm install locust ./stable/locust \
-  --set loadtest.name=my-loadtest \
-  --set loadtest.locust_locustfile_configmap=my-loadtest-locustfile \
-  --set loadtest.locust_lib_configmap=my-loadtest-lib
-```
+A chart for locust
 
 **Homepage:** <https://github.com/locustio/locust>
 
 ## How to install this chart
 
-Check out this repo and then install the chart:
+Add Locust chart repo:
 
 ```console
-helm install my-release ./stable/locust -f values.yaml
+helm repo add locustio https://locustio.github.io/
+```
+
+A simple install with default values:
+
+```console
+helm install locustio/locust
+```
+
+To install the chart with the release name `my-release`:
+
+```console
+helm install my-release locustio/locust
+```
+
+To install with some set values:
+
+```console
+helm install my-release locustio/locust --set values_key1=value1 --set values_key2=value2
+```
+
+To install with custom values file:
+
+```console
+helm install my-release locustio/locust -f values.yaml
 ```
 
 ## Values
@@ -85,3 +91,9 @@ helm install my-release ./stable/locust -f values.yaml
 | worker.resources | object | `{}` | resources for the locust worker |
 | worker.serviceAccountAnnotations | object | `{}` |  |
 | worker.strategy.type | string | `"RollingUpdate"` |  |
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| max-rocket-internet | max.williams@deliveryhero.com |  |
