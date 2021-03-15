@@ -7,6 +7,13 @@ Expand the name of the chart.
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "locust.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{- define "locust.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
@@ -65,7 +72,6 @@ loadtest: {{ .Values.loadtest.name }}
 {{- if .Values.extraLabels }}
 {{ toYaml .Values.extraLabels }}
 {{- end }}
-{{- end -}}
 
 {{- define "locust.locustfile_configmap_name" -}}
 {{ if eq .Values.loadtest.locust_locustfile_configmap "" -}}
