@@ -7,6 +7,13 @@ Expand the name of the chart.
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "locust.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{- define "locust.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
@@ -53,15 +60,18 @@ Create fully qualified configmap name.
 {{- end -}}
 
 {{- define "locust.labels" -}}
-heritage: {{ .Release.Service | quote }}
-release: {{ .Release.Name | quote }}
-chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-app: locust
+app.kubernetes.io/name: {{ include "locust.name" . }}
+helm.sh/chart: {{ include "locust.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
 loadtest: {{ .Values.loadtest.name }}
 {{- if .Values.extraLabels }}
 {{ toYaml .Values.extraLabels }}
 {{- end }}
-{{- end -}}
 
 {{- define "locust.locustfile_configmap_name" -}}
 {{ if eq .Values.loadtest.locust_locustfile_configmap "" -}}
