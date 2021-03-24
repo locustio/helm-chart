@@ -8,7 +8,7 @@ rm -f .helm-docs-md5sum-before .helm-docs-md5sum-after
 md5sum stable/*/README.md > .helm-docs-md5sum-before
 
 # Run helm-docs to generate all README.md files from the template
-helm-docs --template-file=../../ci/README.md.gotmpl
+helm-docs --dry-run --chart-search-root ./stable/locust
 
 # Get md5sum of all README.md files after running helm-docs
 md5sum stable/*/README.md > .helm-docs-md5sum-after
