@@ -8,20 +8,20 @@ rm -f .helm-docs-md5sum-before .helm-docs-md5sum-after
 md5sum stable/*/README.md > .helm-docs-md5sum-before
 
 # Run helm-docs to generate all README.md files from the template
-helm-docs --dry-run --chart-search-root ./stable/locust
+helm-docs --chart-search-root ./stable/locust
 
 # Get md5sum of all README.md files after running helm-docs
 md5sum stable/*/README.md > .helm-docs-md5sum-after
 
-# Run diff to check for any changes that are missing
-CHANGED_FILES=$(diff .helm-docs-md5sum-before .helm-docs-md5sum-after | grep -v ++ | grep ^+ | awk '{print $2}')
+set +e
+echo "Running diff:"
+diff .helm-docs-md5sum-before .helm-docs-md5sum-after
 
-if [ -z "$CHANGED_FILES" ]; then
+if [[ $? -eq 0 ]]; then
   echo "✅ No changes detected"
   exit 0
 else
   echo "🔴 These README.md files need to be updated with helm-docs: "
-  echo "$CHANGED_FILES"
   echo ""
   echo "See main repo README.md for instructions"
   exit 1
