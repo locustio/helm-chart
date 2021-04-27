@@ -26,6 +26,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
+    {{ $ingress := .Values.ingress }}
     {{- range .Values.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
@@ -34,5 +35,11 @@ spec:
             backend:
               serviceName: {{ $fullName }}
               servicePort: 8089
+          {{- range $ingress.extraPaths }}
+          - path: {{ . }}
+            backend:
+              serviceName: {{ $fullName }}
+              servicePort: 8089
+          {{- end }}
     {{- end }}
   {{- end }}

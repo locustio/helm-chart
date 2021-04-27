@@ -52,6 +52,7 @@ helm install my-release locustio/locust -f values.yaml
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
 | ingress.enabled | bool | `false` |  |
+| ingress.extraPaths | list | `[]` |  |
 | ingress.hosts[0].host | string | `"chart-example.local"` |  |
 | ingress.tls | list | `[]` |  |
 | loadtest.environment | object | `{}` | environment variables used in the load test |
