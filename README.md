@@ -1,3 +1,7 @@
+# NOTE
+
+This is not maintained. But https://github.com/deliveryhero/helm-charts/tree/master/stable/locust is! You should probably use that instead!
+
 # Helm chart for Locust
 
 Here you can find the [Helm](https://helm.sh/) chart for installing [Locust](https://locust.io/) on Kubernetes.
